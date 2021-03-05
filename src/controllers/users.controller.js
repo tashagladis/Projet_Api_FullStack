@@ -31,8 +31,15 @@ exports.register = (req, res) => {
 
     });
 
-    const validation = userScheamaValidation.validation(req.body)
+    const validation = userSchemaValidation.validate(req.body)
    
+    if(validation.error){
+        res.status(500).send({
+            massage: err.message || "erreur sur un de vos champ"
+        })
+    }
+
+
     user.save()
     .then(data => {
 
@@ -53,11 +60,7 @@ exports.register = (req, res) => {
         })
     }).catch(err => {
         
-        if(validation.err){
-            res.status(500).send({
-                massage: err.message || "erreur de validation"
-            })
-        }
+       
 
         res.status(500).send({
             massage: err.message || "some error occured"
