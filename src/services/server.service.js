@@ -6,7 +6,9 @@ const port = config.server.port;
 const apiRouter = require('../routes');
 const schema = require('../apollo/schemas');
 const resolvers = require("../apollo/resolvers")
+import cors from "cors";
 const {ApolloServer, gql} = require('apollo-server-express');
+
 //const { schema } = require('../models/user.model');
 
 
@@ -54,7 +56,7 @@ const {ApolloServer, gql} = require('apollo-server-express');
         }
     }
 }*/
-
+app.use(cors());
 
 const graphQlServer = new ApolloServer(({
     typeDefs: schema,
@@ -67,6 +69,7 @@ app.use(bodyParser.json());
 
 
 app.use('/api/V1', apiRouter);
+
 
 exports.start = () => {
     app.listen(port , (err) =>{

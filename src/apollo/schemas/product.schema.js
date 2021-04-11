@@ -11,7 +11,8 @@ type Product {
 }
 extend type Query {
     products: [Product],
-    product(id: ID!): Product
+    product(id: ID!): Product,
+    feed(filter: String): [Product!]!
 
 }
 

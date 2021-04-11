@@ -10,6 +10,25 @@ module.exports = {
             return Product.findById(args.id);
 
         },
+       feed: (parent, args) => {
+            const regex = new RegExp(args.filter, 'i') 
+           
+            const where = args.filter
+              ? {
+                OR: [
+                  { title: {$regex: regex} },
+                  { description: {$regex: regex} },
+                 ],
+               }
+              : {}
+
+            //   const s = 'cool'
+            //  const regex = new RegExp(s, 'i') // i for case insensitive
+            // Posts.find({title: {$regex: regex}})
+                        
+            const products = Product.find({$or: [ {title: {$regex: regex}},{description: {$regex: regex}} ]})
+            return products
+          }
     },
 
     Mutation: {

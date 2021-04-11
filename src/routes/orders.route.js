@@ -10,5 +10,10 @@ router.get('/order/:id',orders.getOneOrder);
 
 router.get('/orders',orders.getOrders);
 
+router.get('/ordersuser/:id',orders.getOrderForUser);
+
+router.delete('/deleteorder/:id', orders.deleteOrder);
+
+
 
 module.exports = router;

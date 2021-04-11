@@ -6,14 +6,14 @@ const joi = require('joi')
 
 
 
-const userSchemaValidation = joi.object({
+/*const userSchemaValidation = joi.object({
   firstName:joi.string().required(),
   lastName:joi.string().required(), 
   passWord:joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
   email:joi.string().required(),
   isAdmin:joi.string().required(),
   age:joi.string().required(),
-})
+})*/
 
 
 
@@ -31,13 +31,13 @@ exports.register = (req, res) => {
 
     });
 
-    const validation = userSchemaValidation.validate(req.body)
+    //const validation = userSchemaValidation.validate(req.body)
    
-    if(validation.error){
+    /*if(validation.error){
         res.status(500).send({
             massage: err.message || "erreur sur un de vos champ"
         })
-    }
+    }*/
 
 
     user.save()
@@ -68,6 +68,10 @@ exports.register = (req, res) => {
     });
 }
 
+//MIS A JOUR
+
+
+
 //Methode pour se logger et recuperer le token
 exports.login = (req, res) => {
     User.findOne({
@@ -77,14 +81,22 @@ exports.login = (req, res) => {
 
         if(!user){
         res.status(404).send({
-                    message: `no user find with email ${req.body.email}`
+                auth: false,
+                token: null,
+                message: `no user find with email ${req.body.email}`,
+                
             })
         }
-        let passwordIsValid = bcrypt.compareSync(req.body.passWord, user.passWord);
+        let passwordIsValid = bcrypt.compareSync(
+            req.body.passWord,
+             user.passWord
+             );
+
         if(!passwordIsValid){
-          res.status.send({
+          res.status(401).send({
                 auth: false,
-                token: null
+                token: null,
+                message: "password invalid"
     
             });
         }
@@ -138,3 +150,50 @@ exports.getMe = (req, res) => {
     })
 }
 
+//MISE A JOUR
+exports.updateUser = (req, res) => {
+    User.findByIdAndUpdate(req.params.id, req.body)
+    .then(data => {
+        User.findById(req.params.id).
+        then(dataU => {
+            res.send(dataU)
+        }).catch(err => {
+            console.log(err);
+            
+        });
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "some error occured"
+        })
+    });
+}
+
+//Delete
+exports.deleteUser = (req, res) => {
+
+    User.findByIdAndDelete(req.params.id)
+    .then(data => {
+
+        res.send({
+            confirmed: true,
+            message:"Suppression reussie"
+            
+        })
+        
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "some error occured"
+        })
+    });
+}
+
+//Liste des utilisateurs
+exports.getUsers = (req, res) => {
+     User.find().
+    then(data => {
+        res.send(data)
+    }).catch(err => {
+        console.log(err);
+        
+    });
+}
