@@ -60,9 +60,6 @@ exports.getOrderForUser = (req, res) => {
           })
       }
      
-    data.filter(function (item){
-        return item.user["_id"] === req.params.id;
-    });
     return  res.send(data);
 
 }).catch((err) => {

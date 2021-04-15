@@ -28,7 +28,7 @@ exports.createCategory = (req, res) => {
 exports.getOneCategory = (req, res) => {
 
 Category.findById(req.params.id)
-  .populate('produts')
+  .populate('products')
   .then((data) => {
       console.log(data)
     if(!data){
@@ -62,6 +62,25 @@ Category.
             message: err.message
         })
 })
+}
+
+//Delete
+exports.deleteCategory = (req, res) => {
+
+    Category.findByIdAndDelete(req.params.id)
+    .then(data => {
+
+        res.send({
+            confirmed: true,
+            message:"Suppression reussie"
+            
+        })
+        
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "some error occured"
+        })
+    });
 }
 
 /* exports.getProducts = (req, res) => {
